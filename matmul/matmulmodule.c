@@ -270,6 +270,16 @@ static PyMethodDef Matrix_methods[] = {
         "Shapes of @left and @right should be the same, got: (%lu, %lu) and (%lu, %lu)", \
         left->nrows, left->ncols, right->nrows, right->ncols);
 
+#define CHECK_BOTH_MATRICES_CAN_BE_MATMULED \
+    VERIFY_IS_MATRIX(_left, "Expected @left to be a Matrix"); \
+    MatrixObject* left = (MatrixObject*)_left; \
+    VERIFY_IS_MATRIX(_right, "Expected @right to be a Matrix"); \
+    MatrixObject* right = (MatrixObject*)_right; \
+    RAISE_EXCEPTION_IF(left->nrows != right->nrows || left->ncols != right->ncols, \
+        PyExc_ValueError, \
+        "@left.ncols should be equal to @right.ncols, but got shapes: (%lu, %lu) and (%lu, %lu)", \
+        left->nrows, left->ncols, right->nrows, right->ncols);
+
 static MatrixObject* MatrixAdd(MatrixObject* left, MatrixObject* right) {
     MatrixObject* result = CreateMatrixFromSize(left->nrows, left->ncols);
     for (size_t i = 0; i < left->nrows; ++i) {
@@ -281,25 +291,9 @@ static MatrixObject* MatrixAdd(MatrixObject* left, MatrixObject* right) {
     return result;
 }
 
-static MatrixObject* MatrixMultiplyElementwise(MatrixObject* left, MatrixObject* right) {
-    MatrixObject* result = CreateMatrixFromSize(left->nrows, left->ncols);
-    for (size_t i = 0; i < left->nrows; ++i) {
-        for (size_t j = 0; j < left->ncols; ++j) {
-            result->data[DataIndexFromCoords(result, i, j)] = 
-                left->data[DataIndexFromCoords(left, i, j)] * right->data[DataIndexFromCoords(right, i, j)];
-        }
-    }
-    return result;
-}
-
 static PyObject* Matrix_add(PyObject* _left, PyObject* _right) {
     CHECK_BOTH_MATRICES_OF_SAME_SHAPE
     return (PyObject*)MatrixAdd(left, right);
-}
-
-static PyObject* Matrix_multiply_elementwise(PyObject* _left, PyObject* _right) {
-    CHECK_BOTH_MATRICES_OF_SAME_SHAPE
-    return (PyObject*)MatrixMultiplyElementwise(left, right);
 }
 
 static MatrixObject* MatrixSubtract(MatrixObject* left, MatrixObject* right) {
@@ -332,6 +326,12 @@ static MatrixObject* MatrixMultiply(MatrixObject* left, MatrixObject* right) {
 static PyObject* Matrix_multiply(PyObject* _left, PyObject* _right) {
     CHECK_BOTH_MATRICES_OF_SAME_SHAPE
     PyObject* result = (PyObject*)MatrixMultiply(left, right);
+    return result;
+}
+
+static PyObject* Matrix_matrix_multiply(PyObject* _left, PyObject* _right) {
+    CHECK_BOTH_MATRICES_CAN_BE_MATMULED
+    PyObject* result = (PyObject*)MatMulImpl(left, right);
     return result;
 }
 
@@ -372,8 +372,8 @@ static PyObject* Matrix_positive(PyObject* _matrix) {
 static PyNumberMethods Matrix_as_number_methods = {
     .nb_add = Matrix_add,
     .nb_subtract = Matrix_subtract,
-    .nb_multiply = Matrix_multiply_elementwise,
-    .nb_matrix_multiply = Matrix_multiply,
+    .nb_multiply = Matrix_multiply,
+    .nb_matrix_multiply = Matrix_matrix_multiply,
     .nb_true_divide = Matrix_divide,
     .nb_negative = Matrix_negative,
     .nb_positive = Matrix_positive,
@@ -426,6 +426,21 @@ PyObject* matmul_ones(PyObject* self, PyObject* args) {
     return (PyObject*)matrix;
 }
 
+PyObject* matmul_eye(PyObject* self, PyObject* args) {
+    int nrows;
+    int ncols;
+    double value;
+    if (!PyArg_ParseTuple(args, "(ii)d", &nrows, &ncols, &value)) {
+        return NULL;
+    }
+    MatrixObject* matrix = CreateMatrixFromSize(nrows, ncols);
+    FillMatrix(matrix, 0);
+    for (int i = 0; i < nrows; ++i) {
+        matrix->data[DataIndexFromCoords(matrix, i, i)] = 1;
+    }
+    return (PyObject*)matrix;
+}
+
 PyObject* matmul_full(PyObject* self, PyObject* args) {
     int nrows;
     int ncols;
@@ -465,6 +480,7 @@ static PyMethodDef MatMulMethods[] = {
     {"zeros", matmul_zeros, METH_VARARGS, "Create matrix of given shape with each entry set to 0"},
     {"ones", matmul_ones, METH_VARARGS, "Create matrix of given shape with each entry set to 1"},
     {"full", matmul_full, METH_VARARGS, "Create matrix of given shape with each entry set to given value"},
+    {"eye", matmul_eye, METH_VARARGS, "Create matrix of given shape with given number on diagonal and 0 outside"},
     {"rand", matmul_rand, METH_VARARGS, "Create matrix of given shape with each entry sampled uniformly on [0, 1)"},
     {"seed", matmul_seed, METH_VARARGS, "Seed the pseudo-random number generator"},
     {NULL, NULL, 0, NULL}

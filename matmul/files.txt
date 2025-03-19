@@ -1,0 +1,9 @@
+/home/enakin/memray-proj/.venv/lib/python3.11/site-packages/matmul-1.0.0-py3.11-linux-x86_64.egg/matmul.py
+/home/enakin/memray-proj/.venv/lib/python3.11/site-packages/matmul-1.0.0-py3.11-linux-x86_64.egg/matmul.cpython-311-x86_64-linux-gnu.so
+/home/enakin/memray-proj/.venv/lib/python3.11/site-packages/matmul-1.0.0-py3.11-linux-x86_64.egg/EGG-INFO/SOURCES.txt
+/home/enakin/memray-proj/.venv/lib/python3.11/site-packages/matmul-1.0.0-py3.11-linux-x86_64.egg/EGG-INFO/native_libs.txt
+/home/enakin/memray-proj/.venv/lib/python3.11/site-packages/matmul-1.0.0-py3.11-linux-x86_64.egg/EGG-INFO/dependency_links.txt
+/home/enakin/memray-proj/.venv/lib/python3.11/site-packages/matmul-1.0.0-py3.11-linux-x86_64.egg/EGG-INFO/top_level.txt
+/home/enakin/memray-proj/.venv/lib/python3.11/site-packages/matmul-1.0.0-py3.11-linux-x86_64.egg/EGG-INFO/not-zip-safe
+/home/enakin/memray-proj/.venv/lib/python3.11/site-packages/matmul-1.0.0-py3.11-linux-x86_64.egg/EGG-INFO/PKG-INFO
+/home/enakin/memray-proj/.venv/lib/python3.11/site-packages/matmul-1.0.0-py3.11-linux-x86_64.egg/__pycache__/matmul.cpython-311.pyc

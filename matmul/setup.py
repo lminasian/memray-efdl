@@ -4,8 +4,8 @@ def main():
     setup(name="matmul",
           version="1.0.0",
           description="Matmul implementation",
-          author="rockrid3r",
-          author_email="rockrid3r@outlook.com",
+          author="lminasian",
+          author_email="lminasian@gmail.com",
           ext_modules=[Extension(
             "matmul", 
             ["matmulmodule.c"],
