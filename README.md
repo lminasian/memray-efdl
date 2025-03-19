@@ -20,4 +20,4 @@ Try running with `--native` both `pow.py` and `pow_no_cached.py`.
 
 # Hint
 `@functools.cache()` caches **all** the arguments to function. What are the arguments to `matpow()`?
-See the solution in [pow_fixed.py]
+See the solution in [pow_fixed.py](pow_fixed.py)
