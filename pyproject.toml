@@ -1,0 +1,12 @@
+[project]
+name = "memray-proj"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "matplotlib>=3.10.1",
+    "memory-profiler>=0.61.0",
+    "memray>=1.16.0",
+    "notebook>=7.3.3",
+]
