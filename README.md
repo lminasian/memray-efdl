@@ -14,9 +14,9 @@ memray flamegraph <generated-bin>   # generates html page with visualizations
 
 # Analyze!
 Analyze the html-page with visualizations. Think on why the memory ramps up so much.
-See the [pow_no_cached](pow_no_cached.py) version, build the same flamegraph and try to understand from where does difference come.
+See the [pow_no_caching.py](pow_no_caching.py) version, build the same flamegraph and try to understand from where does difference come.
 
-Try running with `--native` both `pow.py` and `pow_no_cached.py`.
+Try running with `--native` both `pow.py` and `pow_no_caching.py`.
 
 # Hint
 `@functools.cache()` caches **all** the arguments to function. What are the arguments to `matpow()`?
